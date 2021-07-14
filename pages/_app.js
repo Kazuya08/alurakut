@@ -14,7 +14,8 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
     font-family: sans-serif;
-    background-color: #D9E6F6
+    background-image: url("/background.png");
+    background-position: center;
   }
 
   #__next {
