@@ -31,7 +31,7 @@ function ProfileSidebar(props) {
 }
 
 export default function Home() {
-  const githubUser = "kazuya08";
+  const githubUser = "Kazuya08";
   const [comunidades, setComunidades] = useState([
     {
       id: "523235",
@@ -57,7 +57,7 @@ export default function Home() {
         </div>
         <div className="welcomeArea" style={{ gridArea: "welcomeArea" }}>
           <Box>
-            <h1 className="title">Bem vindo(a)</h1>
+            <h1 className="title">Bem vindo(a), {githubUser}</h1>
             <OrkutNostalgicIconSet />
           </Box>
 
@@ -109,7 +109,7 @@ export default function Home() {
           <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">Comunidade ({comunidades.length})</h2>
             <ul>
-              {comunidades.map((itemAtual) => {
+              {comunidades.slice(0, 6).map((itemAtual) => {
                 return (
                   <li key={itemAtual.id}>
                     {" "}
@@ -127,7 +127,7 @@ export default function Home() {
               Pessoas da comunidade ({pessoasFavoritas.length})
             </h2>
             <ul>
-              {pessoasFavoritas.map((itemAtual) => {
+              {pessoasFavoritas.slice(0, 6).map((itemAtual) => {
                 return (
                   <li key={itemAtual}>
                     {" "}
