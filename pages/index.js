@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MainGrid from "../src/components/MainGrid";
 import Box from "../src/components/Box";
 import {
@@ -30,6 +30,29 @@ function ProfileSidebar(props) {
   );
 }
 
+function ProfileRelationsBox(props) {
+  return (
+    <ProfileRelationsBoxWrapper>
+      <h2 className="smallTitle">
+        {props.title} ({props.items.length})
+      </h2>
+      <ul>
+        {/* {seguidores.slice(0, 6).map((itemAtual) => {
+          return (
+            <li key={itemAtual}>
+              {" "}
+              <a href={`https://github.com/${itemAtual}`}>
+                <img src={itemAtual} />
+                <span>{itemAtual}</span>
+              </a>
+            </li>
+          );
+        })} */}
+      </ul>
+    </ProfileRelationsBoxWrapper>
+  );
+}
+
 export default function Home() {
   const githubUser = "Kazuya08";
   const [comunidades, setComunidades] = useState([
@@ -47,6 +70,17 @@ export default function Home() {
     "J-Yoharu",
     "michaelmedina10",
   ];
+
+  const [seguidores, setSeguidores] = useState([]);
+  useEffect(() => {
+    fetch("http://api.github.com/users/peas/followers")
+      .then((respServidor) => {
+        return respServidor.json();
+      })
+      .then((respCompleta) => {
+        setSeguidores(respCompleta);
+      });
+  }, []);
 
   return (
     <>
@@ -106,6 +140,8 @@ export default function Home() {
           className="profileRelationsArea"
           style={{ gridArea: "profileRelationsArea" }}
         >
+          <ProfileRelationsBox title="Seguidores" items={seguidores} />
+
           <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">Comunidade ({comunidades.length})</h2>
             <ul>
