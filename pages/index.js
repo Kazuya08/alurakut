@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import nookies from "nookies";
+import jwt from "jsonwebtoken";
 import MainGrid from "../src/components/MainGrid";
 import Box from "../src/components/Box";
 import {
@@ -39,7 +41,7 @@ function ProfileRelationsBox(props) {
       <ul>
         {/* {seguidores.slice(0, 6).map((itemAtual) => {
           return (
-            <li key={itemAtual}>
+            <li key={itemAtual.id}>
               {" "}
               <a href={`https://github.com/${itemAtual}`}>
                 <img src={itemAtual} />
@@ -53,8 +55,8 @@ function ProfileRelationsBox(props) {
   );
 }
 
-export default function Home() {
-  const githubUser = "Kazuya08";
+export default function Home(props) {
+  const githubUser = props.githubUser;
   const [comunidades, setComunidades] = useState([
     {
       id: "523235",
@@ -75,11 +77,10 @@ export default function Home() {
   useEffect(() => {
     //GET
     fetch("http://api.github.com/users/peas/followers")
-      .then((respServidor) => {
-        return respServidor.json();
-      })
+      .then((respServidor) => respServidor.json())
       .then((respCompleta) => {
         setSeguidores(respCompleta);
+        console.log(seguidores);
       });
 
     // API GraphQL
@@ -218,4 +219,33 @@ export default function Home() {
       </MainGrid>
     </>
   );
+}
+
+export async function getServerSideProps(ctx) {
+  const cookies = nookies.get(ctx);
+  const token = cookies.USER_TOKEN;
+  const { isAuthenticated } = await fetch(
+    "https://alurakut.vercel.app/api/auth",
+    {
+      headers: {
+        Authorization: token,
+      },
+    }
+  ).then((res) => res.json());
+
+  if (isAuthenticated) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  const { githubUser } = jwt.decode(token);
+  return {
+    props: {
+      githubUser,
+    },
+  };
 }
