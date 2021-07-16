@@ -233,7 +233,7 @@ export async function getServerSideProps(ctx) {
     }
   ).then((res) => res.json());
 
-  if (isAuthenticated) {
+  if (!isAuthenticated) {
     return {
       redirect: {
         destination: "/login",
